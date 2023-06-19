@@ -19,6 +19,9 @@ which adb >/dev/null 2>&1 || {
 	exit 2
 }
 
+directory="$(date +'%Y%m%d%H%M')"
+mkdir -p "${directory}"
+
 deviceFiles="$(adb -d shell ls -1A '/storage/emulated/0/DCIM/Camera/')"
 unsyncedFiles=$(echo "$deviceFiles" | combine - not ".photosync")
 unsyncedFiles=$(echo $unsyncedFiles)
@@ -34,9 +37,6 @@ errors=0
 
 echo "Syncing ${numFiles} files" >&2
 echo >&2
-
-directory="1+$(date +'%Y%m%d%H%M')"
-mkdir -p "${directory}"
 
 for filename in $unsyncedFiles; do
 	percentage=$(( (i * 100) / numFiles ))
